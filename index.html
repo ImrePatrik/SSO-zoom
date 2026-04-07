@@ -375,7 +375,17 @@
   const tipOut    = document.getElementById('tooltip-out');
 
   const MIN = 1.0, MAX = 5.0, STEP = 0.4;
-  let scale = 1.0, tx = 0, ty = 0;
+  // Use discrete zoom levels to avoid floating point drift
+  const LEVELS = [];
+  for (let s = MIN; s <= MAX + 0.001; s = Math.round((s + STEP) * 100) / 100) {
+    LEVELS.push(Math.round(s * 100) / 100);
+  }
+  // Ensure MIN and MAX are exact
+  LEVELS[0] = MIN;
+  LEVELS[LEVELS.length - 1] = MAX;
+
+  let levelIdx = 0; // current index in LEVELS
+  let scale = MIN, tx = 0, ty = 0;
   let dragging = false, dx, dy;
 
   function clamp() {
@@ -391,23 +401,30 @@
     clamp();
     content.style.transform = `translate(${tx}px,${ty}px) scale(${scale})`;
     zoomLabel.textContent = Math.round(scale * 100) + '%';
-    btnIn.disabled  = scale >= MAX;
-    btnOut.disabled = scale <= MIN;
+    btnIn.disabled  = levelIdx >= LEVELS.length - 1;
+    btnOut.disabled = levelIdx <= 0;
   }
 
-  function zoomTo(ns, cx, cy) {
+  function zoomTo(newIdx, cx, cy) {
+    newIdx = Math.max(0, Math.min(LEVELS.length - 1, newIdx));
+    const ns = LEVELS[newIdx];
     const vw = viewport.clientWidth, vh = viewport.clientHeight;
     cx = cx ?? vw/2; cy = cy ?? vh/2;
-    ns = Math.max(MIN, Math.min(MAX, ns));
     const r = ns / scale;
     tx = cx - r*(cx - tx);
     ty = cy - r*(cy - ty);
     scale = ns;
+    levelIdx = newIdx;
     apply(true);
   }
 
-  btnIn.addEventListener('click',  () => zoomTo(scale + STEP));
-  btnOut.addEventListener('click', () => zoomTo(scale - STEP));
+  function zoomByWheel(direction, cx, cy) {
+    // direction: +1 = zoom in, -1 = zoom out
+    zoomTo(levelIdx + direction, cx, cy);
+  }
+
+  btnIn.addEventListener('click',  () => zoomTo(levelIdx + 1));
+  btnOut.addEventListener('click', () => zoomTo(levelIdx - 1));
 
   btnIn.addEventListener('mouseenter',  () => tipIn.style.display  = 'block');
   btnIn.addEventListener('mouseleave',  () => tipIn.style.display  = 'none');
@@ -417,7 +434,7 @@
   viewport.addEventListener('wheel', (e) => {
     e.preventDefault();
     const r = viewport.getBoundingClientRect();
-    zoomTo(scale + (e.deltaY > 0 ? -STEP : STEP), e.clientX - r.left, e.clientY - r.top);
+    zoomByWheel(e.deltaY > 0 ? -1 : 1, e.clientX - r.left, e.clientY - r.top);
   }, { passive: false });
 
   viewport.addEventListener('mousedown', (e) => {
@@ -434,10 +451,10 @@
   });
   window.addEventListener('mouseup', () => dragging = false);
 
-  viewport.addEventListener('dblclick', () => { scale=1; tx=0; ty=0; apply(true); });
+  viewport.addEventListener('dblclick', () => { scale=MIN; levelIdx=0; tx=0; ty=0; apply(true); });
   window.addEventListener('keydown', (e) => {
-    if (e.key==='+' || e.key==='=') zoomTo(scale+STEP);
-    if (e.key==='-' || e.key==='_') zoomTo(scale-STEP);
+    if (e.key==='+' || e.key==='=') zoomTo(levelIdx + 1);
+    if (e.key==='-' || e.key==='_') zoomTo(levelIdx - 1);
   });
 
   apply(false);
