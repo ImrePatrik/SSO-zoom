@@ -6,7 +6,6 @@
 <title>SSO Map Zoom – Feature Proposal</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
-
   body {
     background: #1a1a2e;
     display: flex;
@@ -18,276 +17,36 @@
     gap: 32px;
     padding: 30px 0;
   }
-
-  .label-row {
-    display: flex;
-    gap: 40px;
-    align-items: flex-end;
-  }
-
-  .panel-wrap {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .panel-title {
-    font-size: 13px;
-    font-weight: bold;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-  }
+  .label-row { display: flex; gap: 40px; align-items: flex-end; }
+  .panel-wrap { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .panel-title { font-size: 13px; font-weight: bold; letter-spacing: 1.5px; text-transform: uppercase; }
   .panel-title.original { color: #aaa; }
   .panel-title.new      { color: #5bc8f5; }
-
-  /* ── SSO WINDOW FRAME ── */
-  .sso-window {
-    border: 2px solid #2a5fa8;
-    border-radius: 4px;
-    overflow: hidden;
-    box-shadow: 0 0 0 1px #1a3a6a, 0 8px 40px rgba(0,0,0,0.9);
-    width: 520px;
-  }
-
-  /* Title bar */
-  .sso-titlebar {
-    background: linear-gradient(180deg, #3a8fd4 0%, #1e6ab8 50%, #1558a0 100%);
-    padding: 5px 10px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 1px solid #1a4a8a;
-    min-height: 28px;
-  }
-  .sso-titlebar-text {
-    color: #fff;
-    font-size: 13px;
-    font-weight: bold;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
-  }
-  .sso-close {
-    width: 18px; height: 18px;
-    background: linear-gradient(180deg, #e05050 0%, #a82020 100%);
-    border: 1px solid #802020;
-    border-radius: 2px;
-    color: #fff;
-    font-size: 11px;
-    font-weight: bold;
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer;
-    text-shadow: 0 1px 1px rgba(0,0,0,0.5);
-  }
-
-  /* Tab bar */
-  .sso-tabs {
-    background: #1a4a8a;
-    display: flex;
-    border-bottom: 1px solid #0f3060;
-    padding: 0 6px;
-    gap: 2px;
-  }
-  .sso-tab {
-    padding: 5px 14px;
-    font-size: 12px;
-    color: #a0c4e8;
-    cursor: pointer;
-    border-top: 2px solid transparent;
-    margin-top: 2px;
-  }
-  .sso-tab.active {
-    background: #1e5c9a;
-    color: #fff;
-    border-top-color: #5bc8f5;
-    font-weight: bold;
-    border-radius: 2px 2px 0 0;
-  }
-  .sso-tab-right {
-    margin-left: auto;
-    padding: 5px 14px;
-    font-size: 12px;
-    color: #a0c4e8;
-    cursor: pointer;
-    background: #163d78;
-    border-radius: 2px;
-    margin-top: 3px;
-    margin-bottom: 3px;
-    border: 1px solid #0f2d60;
-  }
-
-  /* Map area */
-  .sso-maparea {
-    position: relative;
-    width: 100%;
-    height: 380px;
-    background: #0a0a1a;
-    overflow: hidden;
-  }
-
-  .sso-maparea img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    user-select: none;
-    pointer-events: none;
-  }
-
-  /* Zoomable map content */
-  #map-content-zoom {
-    position: absolute;
-    inset: 0;
-    transform-origin: center center;
-    will-change: transform;
-    cursor: grab;
-  }
+  .sso-window { border: 2px solid #2a5fa8; border-radius: 4px; overflow: hidden; box-shadow: 0 0 0 1px #1a3a6a, 0 8px 40px rgba(0,0,0,0.9); width: 520px; }
+  .sso-titlebar { background: linear-gradient(180deg, #3a8fd4 0%, #1e6ab8 50%, #1558a0 100%); padding: 5px 10px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #1a4a8a; min-height: 28px; }
+  .sso-titlebar-text { color: #fff; font-size: 13px; font-weight: bold; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
+  .sso-close { width: 18px; height: 18px; background: linear-gradient(180deg, #e05050 0%, #a82020 100%); border: 1px solid #802020; border-radius: 2px; color: #fff; font-size: 11px; font-weight: bold; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+  .sso-tabs { background: #1a4a8a; display: flex; border-bottom: 1px solid #0f3060; padding: 0 6px; gap: 2px; }
+  .sso-tab { padding: 5px 14px; font-size: 12px; color: #a0c4e8; cursor: pointer; border-top: 2px solid transparent; margin-top: 2px; }
+  .sso-tab.active { background: #1e5c9a; color: #fff; border-top-color: #5bc8f5; font-weight: bold; border-radius: 2px 2px 0 0; }
+  .sso-tab-right { margin-left: auto; padding: 5px 14px; font-size: 12px; color: #a0c4e8; cursor: pointer; background: #163d78; border-radius: 2px; margin-top: 3px; margin-bottom: 3px; border: 1px solid #0f2d60; }
+  .sso-maparea { position: relative; width: 100%; height: 380px; background: #0a0a1a; overflow: hidden; }
+  .sso-maparea img { width: 100%; height: 100%; object-fit: cover; display: block; user-select: none; pointer-events: none; }
+  #map-content-zoom { position: absolute; inset: 0; transform-origin: center center; will-change: transform; cursor: grab; }
   #map-content-zoom:active { cursor: grabbing; }
-  #map-content-zoom img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    user-select: none;
-    -webkit-user-drag: none;
-  }
-
-  /* ── THE NEW ZOOM BUTTONS (the only addition) ── */
-  .zoom-controls {
-    position: absolute;
-    bottom: 14px;
-    right: 14px;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    z-index: 20;
-  }
-
-  .zoom-btn {
-    width: 32px;
-    height: 32px;
-    border-radius: 4px;
-    border: 1px solid #2a6ab8;
-    background: linear-gradient(180deg, #2a6ab8cc 0%, #1a4a8acc 100%);
-    color: #e0f0ff;
-    font-size: 22px;
-    font-weight: bold;
-    font-family: Arial, sans-serif;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    line-height: 1;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.15);
-    transition: background 0.1s, border-color 0.1s, transform 0.08s;
-    user-select: none;
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-  }
-  .zoom-btn:hover {
-    background: linear-gradient(180deg, #3a80d8ee 0%, #2a5ab8ee 100%);
-    border-color: #5bc8f5;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.8), 0 0 8px rgba(91,200,245,0.3), inset 0 1px 0 rgba(255,255,255,0.2);
-    color: #fff;
-    transform: translateY(-1px);
-  }
-  .zoom-btn:active {
-    transform: translateY(1px);
-    background: linear-gradient(180deg, #1a3a78ee 0%, #2a5ab8ee 100%);
-  }
+  #map-content-zoom img { width: 100%; height: 100%; object-fit: cover; display: block; user-select: none; -webkit-user-drag: none; }
+  .zoom-controls { position: absolute; bottom: 14px; right: 14px; display: flex; flex-direction: column; gap: 4px; z-index: 20; }
+  .zoom-btn { width: 32px; height: 32px; border-radius: 4px; border: 1px solid #2a6ab8; background: linear-gradient(180deg, #2a6ab8cc 0%, #1a4a8acc 100%); color: #e0f0ff; font-size: 22px; font-weight: bold; font-family: Arial, sans-serif; cursor: pointer; display: flex; align-items: center; justify-content: center; line-height: 1; box-shadow: 0 2px 6px rgba(0,0,0,0.7); transition: background 0.1s, border-color 0.1s, transform 0.08s; user-select: none; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+  .zoom-btn:hover { background: linear-gradient(180deg, #3a80d8ee 0%, #2a5ab8ee 100%); border-color: #5bc8f5; color: #fff; transform: translateY(-1px); }
+  .zoom-btn:active { transform: translateY(1px); background: linear-gradient(180deg, #1a3a78ee 0%, #2a5ab8ee 100%); }
   .zoom-btn:disabled { opacity: 0.3; cursor: default; transform: none; }
-
-  /* NEW badge */
-  .new-badge {
-    position: absolute;
-    top: -8px;
-    right: -8px;
-    background: #f5a623;
-    color: #fff;
-    font-size: 9px;
-    font-weight: bold;
-    padding: 2px 5px;
-    border-radius: 8px;
-    letter-spacing: 0.5px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.5);
-    pointer-events: none;
-    z-index: 30;
-  }
-
-  /* Highlight arrow pointing to zoom buttons */
-  .highlight-arrow {
-    position: absolute;
-    bottom: 60px;
-    right: 55px;
-    pointer-events: none;
-    z-index: 25;
-  }
-
-  /* Status bar */
-  .sso-statusbar {
-    background: linear-gradient(180deg, #1a4a8a 0%, #163d78 100%);
-    border-top: 1px solid #0f3060;
-    padding: 4px 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    min-height: 24px;
-  }
-  .sso-statusbar-text {
-    font-size: 11px;
-    color: #a0c4e8;
-  }
-
-  /* Zoom level indicator inside map */
-  .zoom-level-badge {
-    position: absolute;
-    bottom: 14px;
-    left: 12px;
-    font-size: 11px;
-    color: rgba(160,196,232,0.8);
-    font-family: Arial, sans-serif;
-    pointer-events: none;
-    text-shadow: 0 1px 3px rgba(0,0,0,1);
-    z-index: 20;
-  }
-
-  /* Annotation for the new panel */
-  .annotation {
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    pointer-events: none;
-    z-index: 15;
-  }
-
-  /* Divider between panels */
-  .divider {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    color: #5bc8f5;
-    font-size: 18px;
-    font-weight: bold;
-    align-self: center;
-    margin-top: 30px;
-  }
-  .divider-line {
-    width: 1px;
-    height: 60px;
-    background: linear-gradient(180deg, transparent, #5bc8f5, transparent);
-  }
-
-  /* Tooltip on zoom buttons */
-  .tooltip {
-    position: absolute;
-    right: 50px;
-    background: rgba(0,0,0,0.85);
-    color: #5bc8f5;
-    font-size: 10px;
-    padding: 3px 7px;
-    border-radius: 3px;
-    white-space: nowrap;
-    border: 1px solid #2a5fa8;
-    pointer-events: none;
-  }
+  .new-badge { position: absolute; top: -8px; right: -8px; background: #f5a623; color: #fff; font-size: 9px; font-weight: bold; padding: 2px 5px; border-radius: 8px; pointer-events: none; z-index: 30; }
+  .sso-statusbar { background: linear-gradient(180deg, #1a4a8a 0%, #163d78 100%); border-top: 1px solid #0f3060; padding: 4px 10px; display: flex; justify-content: space-between; align-items: center; min-height: 24px; }
+  .sso-statusbar-text { font-size: 11px; color: #a0c4e8; }
+  .zoom-level-badge { position: absolute; bottom: 14px; left: 12px; font-size: 11px; color: rgba(160,196,232,0.8); font-family: Arial, sans-serif; pointer-events: none; text-shadow: 0 1px 3px rgba(0,0,0,1); z-index: 20; }
+  .divider { display: flex; align-items: center; gap: 10px; color: #5bc8f5; font-size: 18px; font-weight: bold; align-self: center; margin-top: 30px; }
+  .divider-line { width: 1px; height: 60px; background: linear-gradient(180deg, transparent, #5bc8f5, transparent); }
+  .tooltip { position: absolute; right: 50px; background: rgba(0,0,0,0.85); color: #5bc8f5; font-size: 10px; padding: 3px 7px; border-radius: 3px; white-space: nowrap; border: 1px solid #2a5fa8; pointer-events: none; }
   #tooltip-in  { bottom: 36px; }
   #tooltip-out { bottom: 6px; }
 </style>
@@ -296,10 +55,9 @@
 
 <div class="label-row">
 
-  <!-- ORIGINAL PANEL -->
   <div class="panel-wrap">
     <div class="panel-title original">▶ Jelenlegi állapot (zoom nélkül)</div>
-    <div class="sso-window" id="win-original">
+    <div class="sso-window">
       <div class="sso-titlebar">
         <span class="sso-titlebar-text">Térkép</span>
         <div class="sso-close">✕</div>
@@ -311,7 +69,6 @@
       </div>
       <div class="sso-maparea">
         <img src="Map_D_Large.png" alt="Jorvik térkép" draggable="false"/>
-        <!-- No zoom controls — this is the current state -->
       </div>
       <div class="sso-statusbar">
         <span class="sso-statusbar-text">Moorland Lovarda</span>
@@ -320,17 +77,13 @@
     </div>
   </div>
 
-  <!-- DIVIDER -->
   <div class="divider">
-    <div class="divider-line"></div>
-    +
-    <div class="divider-line"></div>
+    <div class="divider-line"></div>+<div class="divider-line"></div>
   </div>
 
-  <!-- NEW PANEL WITH ZOOM -->
   <div class="panel-wrap">
     <div class="panel-title new">✦ Javasolt változat (zoom gombokkal)</div>
-    <div class="sso-window" id="win-new">
+    <div class="sso-window">
       <div class="sso-titlebar">
         <span class="sso-titlebar-text">Térkép</span>
         <div class="sso-close">✕</div>
@@ -344,8 +97,6 @@
         <div id="map-content-zoom">
           <img src="Map_D_Large.png" alt="Jorvik térkép" draggable="false"/>
         </div>
-
-        <!-- ZOOM CONTROLS — the only new addition -->
         <div class="zoom-controls" id="zoom-controls">
           <div class="new-badge">ÚJ</div>
           <div id="tooltip-in"  class="tooltip" style="display:none;">Közelítés</div>
@@ -353,7 +104,6 @@
           <button class="zoom-btn" id="btn-in"  title="Közelítés">+</button>
           <button class="zoom-btn" id="btn-out" title="Távolítás">−</button>
         </div>
-
         <div class="zoom-level-badge" id="zoom-label">100%</div>
       </div>
       <div class="sso-statusbar">
@@ -366,101 +116,88 @@
 </div>
 
 <script>
-  const content   = document.getElementById('map-content-zoom');
-  const viewport  = document.getElementById('map-viewport');
-  const zoomLabel = document.getElementById('zoom-label');
-  const btnIn     = document.getElementById('btn-in');
-  const btnOut    = document.getElementById('btn-out');
-  const tipIn     = document.getElementById('tooltip-in');
-  const tipOut    = document.getElementById('tooltip-out');
+  const content      = document.getElementById('map-content-zoom');
+  const viewport     = document.getElementById('map-viewport');
+  const zoomLabel    = document.getElementById('zoom-label');
+  const btnIn        = document.getElementById('btn-in');
+  const btnOut       = document.getElementById('btn-out');
+  const tipIn        = document.getElementById('tooltip-in');
+  const tipOut       = document.getElementById('tooltip-out');
+  const zoomControls = document.getElementById('zoom-controls');
 
-  // Exact discrete levels — no floating point math
   const LEVELS = [100, 120, 140, 160, 200];
-  let idx = 0;   // current level index
+  let idx = 0;
   let tx = 0, ty = 0;
-  let dragging = false, dragStartX, dragStartY;
+  let dragging = false, dragStartX = 0, dragStartY = 0;
 
   function getScale() { return LEVELS[idx] / 100; }
 
   function clampTranslation() {
-    const scale = getScale();
-    const vw = viewport.clientWidth;
-    const vh = viewport.clientHeight;
-    const maxX = (vw * (scale - 1)) / 2;
-    const maxY = (vh * (scale - 1)) / 2;
-    if (tx > maxX)  tx = maxX;
-    if (tx < -maxX) tx = -maxX;
-    if (ty > maxY)  ty = maxY;
-    if (ty < -maxY) ty = -maxY;
+    var scale = getScale();
+    var vw = viewport.clientWidth;
+    var vh = viewport.clientHeight;
+    var maxX = (vw * (scale - 1)) / 2;
+    var maxY = (vh * (scale - 1)) / 2;
+    tx = Math.max(-maxX, Math.min(maxX, tx));
+    ty = Math.max(-maxY, Math.min(maxY, ty));
   }
 
-  function applyTransform(animate) {
-    content.style.transition = animate
-      ? 'transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
-      : 'none';
+  function render(animate) {
+    content.style.transition = animate ? 'transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)' : 'none';
     clampTranslation();
-    const scale = getScale();
-    content.style.transform = 'translate(' + tx + 'px,' + ty + 'px) scale(' + scale + ')';
+    content.style.transform = 'translate(' + tx + 'px, ' + ty + 'px) scale(' + getScale() + ')';
     zoomLabel.textContent = LEVELS[idx] + '%';
     btnIn.disabled  = (idx >= LEVELS.length - 1);
     btnOut.disabled = (idx <= 0);
   }
 
-  function zoomIn(cx, cy) {
-    if (idx >= LEVELS.length - 1) return;
-    const oldScale = getScale();
-    idx++;
-    const newScale = getScale();
-    const vw = viewport.clientWidth;
-    const vh = viewport.clientHeight;
-    if (cx === undefined) cx = vw / 2;
-    if (cy === undefined) cy = vh / 2;
-    const ratio = newScale / oldScale;
+  function zoomToIndex(nextIdx, cx, cy) {
+    if (nextIdx < 0 || nextIdx >= LEVELS.length || nextIdx === idx) return;
+    var oldScale = getScale();
+    var vw = viewport.clientWidth;
+    var vh = viewport.clientHeight;
+    cx = (cx !== undefined) ? cx : vw / 2;
+    cy = (cy !== undefined) ? cy : vh / 2;
+    idx = nextIdx;
+    var newScale = getScale();
+    var ratio = newScale / oldScale;
     tx = cx - ratio * (cx - tx);
     ty = cy - ratio * (cy - ty);
-    applyTransform(true);
+    render(true);
   }
 
-  function zoomOut(cx, cy) {
-    if (idx <= 0) return;
-    const oldScale = getScale();
-    idx--;
-    const newScale = getScale();
-    const vw = viewport.clientWidth;
-    const vh = viewport.clientHeight;
-    if (cx === undefined) cx = vw / 2;
-    if (cy === undefined) cy = vh / 2;
-    const ratio = newScale / oldScale;
-    tx = cx - ratio * (cx - tx);
-    ty = cy - ratio * (cy - ty);
-    applyTransform(true);
-  }
+  function zoomIn(cx, cy)  { zoomToIndex(idx + 1, cx, cy); }
+  function zoomOut(cx, cy) { zoomToIndex(idx - 1, cx, cy); }
 
-  // Buttons
-  btnIn.addEventListener('click', function() { zoomIn(); });
-  btnOut.addEventListener('click', function() { zoomOut(); });
+  btnIn.addEventListener('click', function(e) {
+    e.preventDefault(); e.stopPropagation(); zoomIn();
+  });
+  btnOut.addEventListener('click', function(e) {
+    e.preventDefault(); e.stopPropagation(); zoomOut();
+  });
 
-  // Tooltips
+  ['mousedown','mouseup','click','dblclick','wheel'].forEach(function(type) {
+    zoomControls.addEventListener(type, function(e) {
+      e.stopPropagation();
+      if (type === 'wheel') e.preventDefault();
+    }, { passive: false });
+  });
+
   btnIn.addEventListener('mouseenter',  function() { tipIn.style.display  = 'block'; });
-  btnIn.addEventListener('mouseleave',  function() { tipIn.style.display  = 'none'; });
+  btnIn.addEventListener('mouseleave',  function() { tipIn.style.display  = 'none';  });
   btnOut.addEventListener('mouseenter', function() { tipOut.style.display = 'block'; });
-  btnOut.addEventListener('mouseleave', function() { tipOut.style.display = 'none'; });
+  btnOut.addEventListener('mouseleave', function() { tipOut.style.display = 'none';  });
 
-  // Mouse wheel
   viewport.addEventListener('wheel', function(e) {
+    if (zoomControls.contains(e.target)) return;
     e.preventDefault();
-    const r = viewport.getBoundingClientRect();
-    const cx = e.clientX - r.left;
-    const cy = e.clientY - r.top;
-    if (e.deltaY < 0) {
-      zoomIn(cx, cy);
-    } else {
-      zoomOut(cx, cy);
-    }
+    var rect = viewport.getBoundingClientRect();
+    if (e.deltaY < 0) zoomIn(e.clientX - rect.left, e.clientY - rect.top);
+    else zoomOut(e.clientX - rect.left, e.clientY - rect.top);
   }, { passive: false });
 
-  // Drag to pan
   viewport.addEventListener('mousedown', function(e) {
+    if (zoomControls.contains(e.target)) return;
     if (idx === 0) return;
     dragging = true;
     dragStartX = e.clientX - tx;
@@ -472,24 +209,21 @@
     tx = e.clientX - dragStartX;
     ty = e.clientY - dragStartY;
     clampTranslation();
-    const scale = getScale();
-    content.style.transform = 'translate(' + tx + 'px,' + ty + 'px) scale(' + scale + ')';
+    content.style.transform = 'translate(' + tx + 'px, ' + ty + 'px) scale(' + getScale() + ')';
   });
   window.addEventListener('mouseup', function() { dragging = false; });
 
-  // Double click reset
-  viewport.addEventListener('dblclick', function() {
-    idx = 0; tx = 0; ty = 0;
-    applyTransform(true);
+  viewport.addEventListener('dblclick', function(e) {
+    if (zoomControls.contains(e.target)) return;
+    idx = 0; tx = 0; ty = 0; render(true);
   });
 
-  // Keyboard
   window.addEventListener('keydown', function(e) {
     if (e.key === '+' || e.key === '=') zoomIn();
     if (e.key === '-' || e.key === '_') zoomOut();
   });
 
-  applyTransform(false);
+  render(false);
 </script>
 </body>
 </html>
