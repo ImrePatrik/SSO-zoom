@@ -374,15 +374,8 @@
   const tipIn     = document.getElementById('tooltip-in');
   const tipOut    = document.getElementById('tooltip-out');
 
-  const MIN = 1.0, MAX = 5.0, STEP = 0.4;
-  // Use discrete zoom levels to avoid floating point drift
-  const LEVELS = [];
-  for (let s = MIN; s <= MAX + 0.001; s = Math.round((s + STEP) * 100) / 100) {
-    LEVELS.push(Math.round(s * 100) / 100);
-  }
-  // Ensure MIN and MAX are exact
-  LEVELS[0] = MIN;
-  LEVELS[LEVELS.length - 1] = MAX;
+  const LEVELS = [1.0, 1.2, 1.4, 1.6, 2.0];
+  const MIN = LEVELS[0], MAX = LEVELS[LEVELS.length - 1];
 
   let levelIdx = 0; // current index in LEVELS
   let scale = MIN, tx = 0, ty = 0;
